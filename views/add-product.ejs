@@ -1,0 +1,19 @@
+<%- include('./includes/head.ejs') %>
+</head>
+<body>
+
+<header>
+    <%- include('./includes/nav.ejs') %>
+</header>
+
+<main>
+
+    <form action="/add-product" method="post">
+        <input type="text" name="title"><br>
+        <input type="text" name="price">
+        <button type="submit">Add product</button>
+    </form>
+
+</main>
+
+<%- include('./includes/end.ejs') %>

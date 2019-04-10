@@ -24,9 +24,9 @@ const routes = require('./routes');
 // Есть зарезервированные переменные типо view engine или views которые используются для авто конвертации вью в темплейт
 
 // пример использования template engine: pug
-// app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 // говорю что вью лежат в папке views
-// app.set('views', 'views');
+app.set('views', 'views');
 // затем использую  .render метод чтобы отрендерить вью, пример:
 // router.get('/', (req, res, next) => {
 //     res.render('shop');
@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 // теперь ко всем запросам в путях routes.admin добавится /admin/
 // app.use('/admin', routes.admin);
-app.use(routes.admin);
+app.use(routes.admin.router);
 
 app.use('/users', (req, res, next) => {
     res.send(`<h1>Users Page</h1>`);
