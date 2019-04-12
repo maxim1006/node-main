@@ -4,12 +4,19 @@ const express = require('express');
 const router = express.Router();
 const { adminController } = require('../controllers');
 
-router.get('/add-product', adminController.getAddProduct);
 
+
+router.get('/add-product', adminController.getAddProduct);
+router.get('/update-product/:id', adminController.getUpdateProduct);
 router.get('/product-list', adminController.getProductList);
+
+
 
 // могу использовать app.get(), app.post для реакции только на гет пост эвенты, в отличие от app.use() который будет
 // слушать все эвенты
 router.post('/add-product', adminController.postAddProduct);
+router.post('/update-product', adminController.postUpdateProduct);
+
+
 
 module.exports = { router };

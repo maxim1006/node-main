@@ -1,5 +1,7 @@
 const {cartModel} = require('../models');
 
+
+
 const getCart = (req, res, next) => {
     cartModel.getCart().then((cart) => {
         res.render(
@@ -14,12 +16,16 @@ const getCart = (req, res, next) => {
     });
 };
 
-const addToCart = (req, res, next) => {
-    const { productId, price = 10 } = req.body;
+const postAddToCart = (req, res, next) => {
+    const { id, price = 10 } = req.body;
 
     cartModel
-        .addProduct(productId, +price)
-        .then(() => res.redirect('/cart'));
+        .addProduct(id, +price)
+        .then(() => {
+            res.redirect('/cart');
+        });
 };
 
-module.exports = {addToCart, getCart};
+
+
+module.exports = {postAddToCart, getCart};

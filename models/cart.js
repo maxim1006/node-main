@@ -4,6 +4,8 @@ const utils = require('../utils');
 const currentPath = path.join(utils.rootDir, 'data', 'cart.json');
 const currentProductPath = path.join(utils.rootDir, 'data', 'products.json');
 
+
+
 class Cart {
     static async addProduct(id, price) {
         try {
@@ -20,7 +22,7 @@ class Cart {
                 cart.products.push(existingProduct);
             }
 
-            cart.totalPrice += price;
+            cart.totalPrice = +cart.totalPrice + price;
 
             await fs.writeJson(currentPath, cart);
 
@@ -43,5 +45,7 @@ class Cart {
         }
     }
 }
+
+
 
 module.exports = Cart;

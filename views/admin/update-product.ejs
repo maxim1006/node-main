@@ -1,0 +1,50 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+
+<header>
+    <%- include('../includes/nav.ejs') %>
+</header>
+
+<main>
+
+    <form action="/admin/update-product" method="post">
+        <div class="form-control">
+            <label>
+                Title
+                <input type="text" name="title" value="<%= product.title %>">
+            </label>
+        </div>
+
+        <div class="form-control">
+            <label>
+                Image URL
+                <input type="text" name="imageUrl" value="<%= product.imageUrl %>">
+            </label>
+        </div>
+
+        <div class="form-control">
+            <label style="vertical-align: top">
+                Description
+                <textarea rows="5"
+                          name="description">
+                     <%= product.description %>
+                </textarea>
+            </label>
+        </div>
+
+        <div class="form-control">
+            <label>
+                Price
+                <input type="text" name="price" value="<%= product.price %>">
+            </label>
+        </div>
+
+        <input type="hidden" name="id" value="<%= product.id %>">
+
+        <button type="submit">Update product</button>
+    </form>
+
+</main>
+
+<%- include('../includes/end.ejs') %>

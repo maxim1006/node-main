@@ -5,6 +5,8 @@ const utils = require('../utils');
 // let products = [];
 const currentPath = path.join(utils.rootDir, 'data', 'products.json');
 
+
+
 class Product {
     constructor(title, imageUrl, description, price = 0) {
         this.title = title;
@@ -13,24 +15,23 @@ class Product {
         this.price = price;
     }
 
-    save() {
+    async save() {
         // products.push(this);
         this.id = `product_id_${+new Date()}`;
 
-        fs.readFile(currentPath, (error, fileContent) => {
-            let products;
-
-            if (error) {
-                products = [];
-            } else {
-                // products doesnt exist
-                products = JSON.parse(fileContent);
-            }
+        try {
+            const products = await fs.readJson(currentPath) || [];
 
             products.push(this);
 
-            fs.writeFile(currentPath, JSON.stringify(products), err => console.log(err));
-        })
+            await fs.writeJson(currentPath, products, err => console.log(err));
+
+            return products;
+        } catch (e) {
+
+            await fs.writeJson(currentPath, [], err => console.log(err));
+            this.save();
+        }
     }
 
     static fetchAll() {
@@ -42,5 +43,7 @@ class Product {
         return fs.readJson(currentPath);
     }
 }
+
+
 
 module.exports = {Product};

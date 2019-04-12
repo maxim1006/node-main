@@ -1,6 +1,8 @@
 const rootDir = require("../utils/root-dir");
 const path = require("path");
 
+
+
 const get404 = (req, res, next) => {
     res
         .status(404)
@@ -17,5 +19,7 @@ const get404 = (req, res, next) => {
         );
     // .send('<h1>Page not found</h1>');
 };
+
+
 
 module.exports = {get404};

@@ -1,6 +1,7 @@
 const {productModel} = require('../models');
-
 const rootDir = require("../utils/root-dir");
+
+
 
 const getShop = (req, res, next) => {
     // express дает возможность сразу отослать html без заголовка // res.setHeader('Content-Type', 'text/html');
@@ -59,7 +60,7 @@ const getProductDetailsById = (req, res, next) => {
     productModel.Product.fetchAllJson()
         .catch(error => console.log(error))
         .then((products) => {
-            const product = products.find(product => product.id === req.params.productId);
+            const product = products.find(product => product.id === req.params.id);
             res.render(
                 'shop/product-details',
                 {
@@ -71,5 +72,7 @@ const getProductDetailsById = (req, res, next) => {
         })
 
 };
+
+
 
 module.exports = {getShop, getProductList, getProductDetailsById};
