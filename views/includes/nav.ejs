@@ -1,6 +1,25 @@
 <nav>
     <ul>
-        <li><a href="/">Shop</a></li>
-        <li><a href="/add-product">Add product</a></li>
+        <li><a href="/" class="<%= path === '/' ? '_active' : '' %>">Home</a></li>
+        <li>
+            <a href="/product-list" class="<%= path === '/product-list' ? '_active' : ''%>">
+                All products
+            </a>
+        </li>
+        <li>
+            <a href="/admin/product-list" class="<%= path === '/admin/product-list' ? '_active' : ''%>">
+                Admin Products
+            </a>
+        </li>
+        <li>
+            <a href="/admin/add-product" class="<%= path === '/admin/add-product' ? '_active' : ''%>">
+                Admin Add product
+            </a>
+        </li>
+        <li>
+            <a href="/cart" class="<%= path === '/cart' ? '_active' : ''%>">
+                Orders
+            </a>
+        </li>
     </ul>
 </nav>

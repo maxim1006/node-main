@@ -1,0 +1,46 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+
+<header>
+    <%- include('../includes/nav.ejs') %>
+</header>
+
+<main>
+
+    <h1>Your cart:</h1>
+
+    <h2>Total price: <%= cart.totalPrice %></h2>
+
+    <% if (cart.products.length > 0) { %>
+        <ul>
+            <% for (let product of cart.products) { %>
+
+                <li>
+                    <h3><%= product.title %>, quantity: <%= product.quantity %></h3>
+                    <div>
+                        <img src=" <%= product.imageUrl %>" alt="<%= product.title %>">
+                    </div>
+                    <p>
+                        <%= product.description %>
+                    </p>
+                    <p>
+                        $ <%= product.price %>
+                    </p>
+                    <%- include('../includes/add-to-cart.ejs', {product}) %>
+                    <p>
+                        <a href="/product-list/<%= product.id %>">Details</a>
+                    </p>
+                </li>
+
+            <% } %>
+        </ul>
+    <% } else { %>
+
+        <p>Empty cart</p>
+
+    <% } %>
+
+</main>
+
+<%- include('../includes/end.ejs') %>

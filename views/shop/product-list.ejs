@@ -1,0 +1,44 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+
+<header>
+    <%- include('../includes/nav.ejs') %>
+</header>
+
+<main>
+
+    <h1>All products</h1>
+
+    <% if (products.length > 0) { %>
+        <ul>
+            <% for (let product of products) { %>
+
+                <li>
+                    <h3><%= product.title %></h3>
+                    <div>
+                        <img src=" <%= product.imageUrl %>" alt="<%= product.title %>">
+                    </div>
+                    <p>
+                        <%= product.description %>
+                    </p>
+                    <p>
+                        $ <%= product.price %>
+                    </p>
+                    <p>
+                        <a href="/product-list/<%= product.id %>">Details</a>
+                    </p>
+                    <%- include('../includes/add-to-cart.ejs', {product}) %>
+                </li>
+
+            <% } %>
+        </ul>
+    <% } else { %>
+
+        <p>Empty products list</p>
+
+    <% } %>
+
+</main>
+
+<%- include('../includes/end.ejs') %>

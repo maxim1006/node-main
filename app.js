@@ -25,8 +25,8 @@ const routes = require('./routes');
 
 // пример использования template engine: pug
 app.set('view engine', 'ejs');
-// говорю что вью лежат в папке views
-app.set('views', 'views');
+// говорю что вью лежат в папке views, закомментировал, тк по умолчанию и так /views
+// app.set('views', 'views');
 // затем использую  .render метод чтобы отрендерить вью, пример:
 // router.get('/', (req, res, next) => {
 //     res.render('shop');
@@ -59,11 +59,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 // так сервлю статические файлы к примеру по пути /styles/main.css
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(routes.cart);
 
 // Routes
 // теперь ко всем запросам в путях routes.admin добавится /admin/
-// app.use('/admin', routes.admin);
-app.use(routes.admin.router);
+app.use('/admin', routes.admin.router);
+// app.use(routes.admin.router);
 
 app.use('/users', (req, res, next) => {
     res.send(`<h1>Users Page</h1>`);
