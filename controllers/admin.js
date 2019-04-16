@@ -1,4 +1,4 @@
-const {productModel: {Product}, db} = require('../models');
+const {productModel: {Product}, dbProductModel} = require('../models');
 const path = require('path');
 const fs = require('fs-extra');
 // const utils = require('../utils');
@@ -39,11 +39,11 @@ const getUpdateProduct = async (req, res, next) => {
     const {id} = req.params;
 
     try {
-        // const products = await db.Product.fetchAllJson();
+        // const products = await dbProductModel.Product.fetchAllJson();
         //
         // const product = products.find(item => item._id === id);
 
-        const product = await db.Product.findById(id);
+        const product = await dbProductModel.Product.findById(id);
 
         res.render(
             'admin/update-product',
@@ -65,7 +65,7 @@ const getProductList = async (req, res, next) => {
         // const products = await Product.fetchAllJson();
 
         // db
-        const products = await db.Product.fetchAllJson();
+        const products = await dbProductModel.Product.fetchAllJson();
 
         res.render(
             'admin/product-list',
@@ -94,7 +94,7 @@ const postAddProduct = (req, res, next) => {
     // через файл
     // const product = new Product(title, imageUrl, description, price);
     // через db
-    const product = new db.Product(title, imageUrl, description, price);
+    const product = new dbProductModel.Product(title, imageUrl, description, price);
 
     product.save().then((products) => {
         // redirect is added by express
@@ -106,7 +106,7 @@ const postUpdateProduct = async (req, res, next) => {
     const {title, imageUrl, description, price, id} = req.body;
 
     try {
-        const products = await db.Product.fetchAllJson();
+        const products = await dbProductModel.Product.fetchAllJson();
         const updatedProductIndex = products.findIndex(item => item._id === id);
 
         // products[updatedProductIndex] = {title, imageUrl, description, price, id};

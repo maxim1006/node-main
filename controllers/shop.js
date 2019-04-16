@@ -1,4 +1,4 @@
-const {productModel: {Product}, db} = require('../models');
+const {productModel: {Product}, dbProductModel} = require('../models');
 
 
 
@@ -24,7 +24,7 @@ const getShop = (req, res, next) => {
     //     })
 
     // fs.readJson(...) - добавляет fs-extra
-    db.Product.fetchAllJson()
+    dbProductModel.Product.fetchAllJson()
         .catch(error => console.log(error))
         .then((products) => {
             res.render(
@@ -40,7 +40,7 @@ const getShop = (req, res, next) => {
 };
 
 const getProductList = (req, res, next) => {
-    db.Product.fetchAllJson()
+    dbProductModel.Product.fetchAllJson()
         .catch(error => console.log(error))
         .then((products) => {
             res.render(
@@ -56,7 +56,7 @@ const getProductList = (req, res, next) => {
 };
 
 const getProductDetailsById = (req, res, next) => {
-    db.Product.findById(req.params.id)
+    dbProductModel.Product.findById(req.params.id)
         .catch(error => console.log(error))
         .then((product) => {
             res.render(

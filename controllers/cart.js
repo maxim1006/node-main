@@ -1,17 +1,18 @@
-const {cartModel, db} = require('../models');
+const {cartModel, dbCartModel, dbProductModel: {Product}} = require('../models');
 
 
 
 const getCart = (req, res, next) => {
     // cartModel.getCart().then((cart) => {
-    db.Cart.getCart().then((cart) => {
+    dbCartModel.Cart.getCart().then((cart) => {
+        console.log(cart);
         res.render(
             'shop/cart',
             {
                 path: '/cart',
                 pageTitle: 'Your cart',
                 cart,
-                products: cart.products
+                products: cart.products || []
             }
         );
     });
@@ -20,11 +21,15 @@ const getCart = (req, res, next) => {
 const postAddToCart = (req, res, next) => {
     const { id, price = 10 } = req.body;
 
-    cartModel
-        .addProduct(id, +price)
-        .then(() => {
-            res.redirect('/cart');
-        });
+    // cartModel
+    //     .addProduct(id, +price)
+    //     .then(() => {
+    //         res.redirect('/cart');
+    //     });
+
+    Product.findById(id).then((product) => {
+        req.user.addToCart(product);
+    });
 };
 
 const postDeleteFromCart = (req, res, next) => {
