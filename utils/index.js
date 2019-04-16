@@ -1,3 +1,4 @@
 const rootDir = require('./root-dir');
+const db = require('./db');
 
-module.exports = {rootDir};
+module.exports = {rootDir, db};

@@ -1,9 +1,10 @@
-const {cartModel} = require('../models');
+const {cartModel, db} = require('../models');
 
 
 
 const getCart = (req, res, next) => {
-    cartModel.getCart().then((cart) => {
+    // cartModel.getCart().then((cart) => {
+    db.Cart.getCart().then((cart) => {
         res.render(
             'shop/cart',
             {
@@ -26,6 +27,16 @@ const postAddToCart = (req, res, next) => {
         });
 };
 
+const postDeleteFromCart = (req, res, next) => {
+    const { id } = req.body;
+
+    cartModel
+        .deleteProduct(id)
+        .then(() => {
+            res.redirect('/cart');
+        });
+};
 
 
-module.exports = {postAddToCart, getCart};
+
+module.exports = {postAddToCart, getCart, postDeleteFromCart};

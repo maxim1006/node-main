@@ -1,10 +1,12 @@
-const {productModel} = require('../models');
+const {productModel: {Product}, db} = require('../models');
 const path = require('path');
 const fs = require('fs-extra');
-const utils = require('../utils');
+// const utils = require('../utils');
+const {db: {mongoConnect, getDb, mongodb}} = require('../utils');
 
 // let products = [];
-const currentPath = path.join(utils.rootDir, 'data', 'products.json');
+// const productsPath = path.join(utils.rootDir, 'data', 'products.json');
+// const cartPath = path.join(utils.rootDir, 'data', 'cart.json');
 
 
 
@@ -37,11 +39,11 @@ const getUpdateProduct = async (req, res, next) => {
     const {id} = req.params;
 
     try {
-        const products = await productModel.Product.fetchAllJson();
+        // const products = await db.Product.fetchAllJson();
+        //
+        // const product = products.find(item => item._id === id);
 
-        const product = products.find(item => item.id === id);
-
-        console.log(product);
+        const product = await db.Product.findById(id);
 
         res.render(
             'admin/update-product',
@@ -59,7 +61,11 @@ const getUpdateProduct = async (req, res, next) => {
 const getProductList = async (req, res, next) => {
 
     try {
-        const products = await productModel.Product.fetchAllJson();
+        // file
+        // const products = await Product.fetchAllJson();
+
+        // db
+        const products = await db.Product.fetchAllJson();
 
         res.render(
             'admin/product-list',
@@ -70,6 +76,14 @@ const getProductList = async (req, res, next) => {
             }
         );
     } catch (e) {
+        res.render(
+            'admin/product-list',
+            {
+                path: '/admin/product-list',
+                pageTitle: 'Admin Product List',
+                products: []
+            }
+        );
         console.log("admin.js getProductList error ", error);
     }
 };
@@ -77,7 +91,10 @@ const getProductList = async (req, res, next) => {
 const postAddProduct = (req, res, next) => {
     // console.log(req.body.title); // тут получаю инфо из формы по умолчанию получу undefined так как надо добавить body-parser
     const {title, imageUrl, description, price} = req.body;
-    const product = new productModel.Product(title, imageUrl, description, price);
+    // через файл
+    // const product = new Product(title, imageUrl, description, price);
+    // через db
+    const product = new db.Product(title, imageUrl, description, price);
 
     product.save().then((products) => {
         // redirect is added by express
@@ -89,12 +106,21 @@ const postUpdateProduct = async (req, res, next) => {
     const {title, imageUrl, description, price, id} = req.body;
 
     try {
-        const products = await productModel.Product.fetchAllJson();
-        const updatedProductIndex = products.findIndex(item => item.id === id);
+        const products = await db.Product.fetchAllJson();
+        const updatedProductIndex = products.findIndex(item => item._id === id);
 
-        products[updatedProductIndex] = {title, imageUrl, description, price, id};
+        // products[updatedProductIndex] = {title, imageUrl, description, price, id};
 
-        await fs.writeJson(currentPath, products);
+        // await fs.writeJson(productsPath, products);
+
+        await getDb().collection('products').updateOne(
+            // new mongodb.ObjectId(id) - монго хранит id в спец объекте поэтому при прокидывании id надо обернуть в спец объект.
+            { _id: new mongodb.ObjectId(id) },
+            {
+                $set: {title, imageUrl, description, price},
+                $currentDate: { lastModified: true }
+            }
+        );
 
         res.redirect('/admin/product-list');
 
@@ -103,6 +129,34 @@ const postUpdateProduct = async (req, res, next) => {
     }
 };
 
+const deleteProduct = async (req, res, next) => {
+    const {id: productId} = req.params;
+    const db = getDb();
+
+    try {
+        await db.collection('products').deleteOne({_id: new mongodb.ObjectId(productId)});
 
 
-module.exports = {getAddProduct, postAddProduct, getProductList, getUpdateProduct, postUpdateProduct};
+        /***** remove deleted products from cart *****/
+        // const cart = await fs.readJson(cartPath);
+        // const deletedProduct = cart.products.find(item => item.id === productId);
+        //
+        // if (deletedProduct) {
+        //     cart.products = cart.products.filter(item => item.id !== productId);
+        //     cart.totalPrice = +cart.totalPrice - deletedProduct.quantity * deletedProduct.price;
+        //
+        //     await fs.writeJson(cartPath, cart);
+        // }
+        /********************************************/
+
+
+        res.redirect('/admin/product-list');
+
+    } catch (e) {
+        console.log('admin.js deleteProduct error ', e);
+    }
+};
+
+
+
+module.exports = {getAddProduct, postAddProduct, getProductList, getUpdateProduct, postUpdateProduct, deleteProduct};

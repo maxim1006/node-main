@@ -1,5 +1,4 @@
-const {productModel} = require('../models');
-const rootDir = require("../utils/root-dir");
+const {productModel: {Product}, db} = require('../models');
 
 
 
@@ -12,7 +11,7 @@ const getShop = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
 
     // так получаю как обычно через fs (с добавление fs-extra)
-    // productModel.Product.fetchAll()
+    // Product.fetchAll()
     //     .catch(error => console.log(error))
     //     .then((products) => {
     //         res.render(
@@ -25,7 +24,7 @@ const getShop = (req, res, next) => {
     //     })
 
     // fs.readJson(...) - добавляет fs-extra
-    productModel.Product.fetchAllJson()
+    db.Product.fetchAllJson()
         .catch(error => console.log(error))
         .then((products) => {
             res.render(
@@ -41,7 +40,7 @@ const getShop = (req, res, next) => {
 };
 
 const getProductList = (req, res, next) => {
-    productModel.Product.fetchAllJson()
+    db.Product.fetchAllJson()
         .catch(error => console.log(error))
         .then((products) => {
             res.render(
@@ -57,10 +56,9 @@ const getProductList = (req, res, next) => {
 };
 
 const getProductDetailsById = (req, res, next) => {
-    productModel.Product.fetchAllJson()
+    db.Product.findById(req.params.id)
         .catch(error => console.log(error))
-        .then((products) => {
-            const product = products.find(product => product.id === req.params.id);
+        .then((product) => {
             res.render(
                 'shop/product-details',
                 {

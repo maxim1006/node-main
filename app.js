@@ -18,6 +18,7 @@ const bodyParser = require("body-parser");
 
 
 const routes = require('./routes');
+const {db} = require('./utils');
 
 
 // так храню гбобальные переменные приложения и забираю их
@@ -81,6 +82,10 @@ app.use(routes.pageNotFound);
 // const server = http.createServer(app);
 // server.listen(4000);
 
-app.listen(4000);
+db.mongoConnect(_ => {
+    app.listen(4000);
+});
+
+
 
 

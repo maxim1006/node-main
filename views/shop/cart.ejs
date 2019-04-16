@@ -29,8 +29,13 @@
                     </p>
                     <%- include('../includes/add-to-cart.ejs', {product}) %>
                     <p>
-                        <a href="/product-list/<%= product.id %>">Details</a>
+                        <a href="/product-list/<%= product._id %>">Details</a>
                     </p>
+
+                    <form action="/delete-from-cart" method="post">
+                        <input type="hidden" name="id" value="<%= product._id %>">
+                        <button type="submit">Remove from cart</button>
+                    </form>
                 </li>
 
             <% } %>
