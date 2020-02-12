@@ -4,6 +4,12 @@ const path = require('path');
 
 
 const filesArray = [
+    "ux-accordion-element",
+    "ux-ace-editor-element",
+    "ux-button-element",
+    "ux-multiple-button-element",
+    "ux-navigation-button-element",
+    "ux-card-tree-element",
 ];
 
 
@@ -19,7 +25,7 @@ const filesArray = [
 
     // move files from dist to dist/ux-ng2-elements
     for (const i of filesArray) {
-        await move(`./dist/${i}.js`, `./dist/${i}.js`);
+        await move(`./dist/${i}.js`, `./dist/ux-ng2-elements/${i}.js`);
     }
 
     // remove <script type="text/javascript" src="main.js"></script>
@@ -32,9 +38,9 @@ const filesArray = [
 function build(fileName) {
     return new Promise((resolve, reject) => {
 
-        shell.exec(`node ...`, () => {
+        shell.exec(`ng build ux-ng2-elements --prod --main=./projects/ux-ng2-elements/src/${fileName + '.main.ts'} --extraWebpackConfig ./helpers/webpack.extra.js --output-hashing none --single-bundle true`, () => {
             fs.rename(
-                path.resolve('./dist/main.js'),
+                path.resolve('./dist/ux-ng2-elements/main.js'),
                 path.resolve(`./dist/${fileName + '.js'}`),
                 (err) => {
                     if (err) reject('ERROR: ' + err);
@@ -51,7 +57,7 @@ function putScripts() {
 
         filesArray.forEach(i => replaceString += `<script type="text/javascript" src="${i}.js"></script>`);
 
-        const filePath = path.resolve("./dist/index.html");
+        const filePath = path.resolve("./dist/ux-ng2-elements/index.html");
         const searchRegex = /<!--PUT_HERE_SCRIPT_TAGS-->/g;
 
         replace(filePath, searchRegex, replaceString)
@@ -64,7 +70,7 @@ function removeMainScript() {
 
         let replaceString = ``;
 
-        const filePath = path.resolve("./dist/index.html");
+        const filePath = path.resolve("./dist/ux-ng2-elements/index.html");
         const searchRegex = /<script type="text\/javascript" src="main.js"><\/script>/g;
 
         replace(filePath, searchRegex, replaceString)
